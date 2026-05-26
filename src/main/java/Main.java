@@ -26,6 +26,7 @@ public class Main {
                     new RegisterHandler()
             );
 
+
             server.setExecutor(null);
 
             server.start();
