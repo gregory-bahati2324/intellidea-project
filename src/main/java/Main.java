@@ -5,6 +5,7 @@ import service.AuthService;
 import java.net.InetSocketAddress;
 
 import handler.LoginHandler;
+import handler.ProfileHandler;
 
 public class Main {
 
@@ -31,6 +32,11 @@ public class Main {
             server.createContext(
                     "/api/login",
                     new LoginHandler()
+            );
+
+            server.createContext(
+                    "/api/profile",
+                    new ProfileHandler()
             );
 
 

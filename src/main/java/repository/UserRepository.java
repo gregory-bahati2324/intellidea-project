@@ -110,4 +110,69 @@ public class UserRepository {
 
         return null;
     }
+    public User findById(int id) {
+
+        String sql = "SELECT * FROM users WHERE id = ?";
+
+        try (
+                Connection conn = DatabaseConfig.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setInt(1, id);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                User user = new User();
+
+                user.setId(rs.getInt("id"));
+                user.setFullName(rs.getString("full_name"));
+                user.setUsername(rs.getString("username"));
+                user.setEmail(rs.getString("email"));
+                user.setPhone(rs.getString("phone"));
+                user.setAvatarUrl(rs.getString("avatar_url"));
+                user.setCreatedAt(rs.getString("created_at"));
+
+                return user;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public void updateUser(int id, User user) {
+
+        String sql = """
+        UPDATE users
+        SET full_name = ?,
+            username = ?,
+            email = ?,
+            phone = ?,
+            avatar_url = ?
+        WHERE id = ?
+    """;
+
+        try (
+                Connection conn = DatabaseConfig.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setString(1, user.getFullName());
+            stmt.setString(2, user.getUsername());
+            stmt.setString(3, user.getEmail());
+            stmt.setString(4, user.getPhone());
+            stmt.setString(5, user.getAvatarUrl());
+            stmt.setInt(6, id);
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
