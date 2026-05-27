@@ -4,6 +4,8 @@ import service.AuthService;
 
 import java.net.InetSocketAddress;
 
+import handler.LoginHandler;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -24,6 +26,11 @@ public class Main {
             server.createContext(
                     "/api/register",
                     new RegisterHandler()
+            );
+
+            server.createContext(
+                    "/api/login",
+                    new LoginHandler()
             );
 
 
