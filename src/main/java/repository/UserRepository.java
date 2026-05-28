@@ -175,4 +175,80 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+    public boolean emailExistsForAnotherUser(
+            String email,
+            int currentUserId
+    ) {
+
+        String sql = """
+        SELECT id FROM users
+        WHERE email = ?
+        AND id != ?
+    """;
+
+        try (
+                Connection conn = DatabaseConfig.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setString(1, email);
+            stmt.setInt(2, currentUserId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public boolean usernameExistsForAnotherUser(
+            String username,
+            int currentUserId
+    ) {
+
+        String sql = """
+        SELECT id FROM users
+        WHERE username = ?
+        AND id != ?
+    """;
+
+        try (
+                Connection conn = DatabaseConfig.connect();
+                PreparedStatement stmt = conn.prepareStatement(sql)
+        ) {
+
+            stmt.setString(1, username);
+            stmt.setInt(2, currentUserId);
+
+            ResultSet rs = stmt.executeQuery();
+
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    public void updatePassword(int id, String password) {
+
+        String sql = "UPDATE users SET password = ? WHERE id = ?";
+
+        try (Connection conn = DatabaseConfig.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, password);
+            stmt.setInt(2, id);
+
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

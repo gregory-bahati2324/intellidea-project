@@ -8,7 +8,10 @@ public class CorsUtil {
 
         exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
         exchange.getResponseHeaders().set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-        exchange.getResponseHeaders().set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+        exchange.getResponseHeaders().set(
+                "Access-Control-Allow-Headers",
+                "Content-Type, Authorization, X-User-Id"
+        );
     }
 
     public static void handleOptions(HttpExchange exchange) throws Exception {

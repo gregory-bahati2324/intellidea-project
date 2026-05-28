@@ -47,13 +47,25 @@ public class ProfileHandler implements HttpHandler {
 
         if (exchange.getRequestMethod().equalsIgnoreCase("PUT")) {
 
+            System.out.println("PROFILE UPDATE HIT");
+
+            String userIdHeader =
+                    exchange.getRequestHeaders()
+                            .getFirst("X-User-Id");
+
+            System.out.println("USER ID HEADER: " + userIdHeader);
+
             String body = new String(
                     exchange.getRequestBody().readAllBytes(),
                     StandardCharsets.UTF_8
             );
 
+            System.out.println("BODY: " + body);
+
             UpdateProfileRequest request =
                     JsonUtil.fromJson(body, UpdateProfileRequest.class);
+
+            System.out.println("FULL NAME: " + request.getFullName());
 
             User updatedUser = new User();
 
@@ -63,9 +75,43 @@ public class ProfileHandler implements HttpHandler {
             updatedUser.setPhone(request.getPhone());
             updatedUser.setAvatarUrl(request.getAvatarUrl());
 
-            userRepository.updateUser(userId, updatedUser);
+            int userId2 = Integer.parseInt(userIdHeader);
 
-            User savedUser = userRepository.findById(userId);
+            if (
+                    userRepository.emailExistsForAnotherUser(
+                            request.getEmail(),
+                            userId
+                    )
+            ) {
+
+                sendJson(
+                        exchange,
+                        400,
+                        "{\"message\":\"Email already exists\"}"
+                );
+
+                return;
+            }
+
+            if (
+                    userRepository.usernameExistsForAnotherUser(
+                            request.getUsername(),
+                            userId
+                    )
+            ) {
+
+                sendJson(
+                        exchange,
+                        400,
+                        "{\"message\":\"Username already exists\"}"
+                );
+
+                return;
+            }
+
+            userRepository.updateUser(userId2, updatedUser);
+
+            User savedUser = userRepository.findById(userId2);
 
             String json = JsonUtil.toJson(savedUser);
 

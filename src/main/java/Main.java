@@ -6,6 +6,7 @@ import java.net.InetSocketAddress;
 
 import handler.LoginHandler;
 import handler.ProfileHandler;
+import handler.ChangePasswordHandler;
 
 public class Main {
 
@@ -37,6 +38,11 @@ public class Main {
             server.createContext(
                     "/api/profile",
                     new ProfileHandler()
+            );
+
+            server.createContext(
+                    "/api/change-password",
+                    new ChangePasswordHandler()
             );
 
 
