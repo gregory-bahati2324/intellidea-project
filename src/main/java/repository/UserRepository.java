@@ -251,4 +251,21 @@ public class UserRepository {
             e.printStackTrace();
         }
     }
+    public int countUsers() {
+        String sql = "SELECT COUNT(*) FROM users";
+
+        try (Connection conn = DatabaseConfig.connect();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
 }

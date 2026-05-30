@@ -1,12 +1,8 @@
 import com.sun.net.httpserver.HttpServer;
-import handler.RegisterHandler;
+import handler.*;
 import service.AuthService;
 
 import java.net.InetSocketAddress;
-
-import handler.LoginHandler;
-import handler.ProfileHandler;
-import handler.ChangePasswordHandler;
 
 public class Main {
 
@@ -43,6 +39,11 @@ public class Main {
             server.createContext(
                     "/api/change-password",
                     new ChangePasswordHandler()
+            );
+
+            server.createContext(
+                    "/api/dashboard",
+                    new DashboardHandler()
             );
 
 
