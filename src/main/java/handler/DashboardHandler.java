@@ -41,7 +41,7 @@ public class DashboardHandler implements HttpHandler {
 
         DashboardResponse.Stat s2 = new DashboardResponse.Stat();
         s2.label = "Active sessions";
-        s2.value = "120";
+        s2.value = "12";
         s2.change = "+1.8%";
 
         DashboardResponse.Stat s3 = new DashboardResponse.Stat();
@@ -51,7 +51,7 @@ public class DashboardHandler implements HttpHandler {
 
         DashboardResponse.Stat s4 = new DashboardResponse.Stat();
         s4.label = "Security score";
-        s4.value = "98/100";
+        s4.value = "9/100";
         s4.change = "+2";
 
         res.stats = List.of(s1, s2, s3, s4);
@@ -63,7 +63,7 @@ public class DashboardHandler implements HttpHandler {
 
         res.activity = List.of(a1);
 
-        res.profileCompletion = 70;
+        res.profileCompletion = 60;
 
         String json = JsonUtil.toJson(res);
 
