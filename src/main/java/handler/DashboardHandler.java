@@ -3,6 +3,7 @@ package handler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dto.DashboardResponse;
+import middleware.AuthMiddleware;
 import repository.UserRepository;
 import utils.CorsUtil;
 import utils.JsonUtil;
@@ -27,6 +28,13 @@ public class DashboardHandler implements HttpHandler {
 
         if (!exchange.getRequestMethod().equalsIgnoreCase("GET")) {
             exchange.sendResponseHeaders(405, -1);
+            return;
+        }
+
+        Integer userId = AuthMiddleware.authenticate(exchange);
+
+        if (userId == null) {
+            exchange.sendResponseHeaders(401, -1);
             return;
         }
 

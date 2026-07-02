@@ -45,6 +45,7 @@ public class RegisterHandler implements HttpHandler {
         System.out.println("FULLNAME: " + request.getFullName());
 
         if (userRepository.emailExists(request.getEmail())) {
+            System.out.println("EMAIL EXISTS");
             sendResponse(exchange, 400, "Email already exists");
             return;
         }

@@ -6,14 +6,12 @@ import dto.AuthResponse;
 import dto.LoginRequest;
 import model.User;
 import repository.UserRepository;
-import utils.CorsUtil;
-import utils.JsonUtil;
-import utils.PasswordUtil;
+import utils.*;
 
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.UUID;
+
 
 public class LoginHandler implements HttpHandler {
 
@@ -68,10 +66,26 @@ public class LoginHandler implements HttpHandler {
         }
 
         // fake token for now
-        String token = UUID.randomUUID().toString();
+        String accessToken =
+                JwtUtil.generateAccessToken(
+                        user.getId()
+                );
+
+        String refreshToken =
+                JwtUtil.generateRefreshToken(
+                        user.getId()
+                );
+
+        CookieUtil.setRefreshCookie(
+                exchange,
+                refreshToken
+        );
 
         AuthResponse response =
-                new AuthResponse(token, user);
+                new AuthResponse(
+                        accessToken,
+                        user
+                );
 
         String json =
                 JsonUtil.toJson(response);

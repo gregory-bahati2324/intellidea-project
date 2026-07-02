@@ -4,16 +4,19 @@ import model.User;
 
 public class AuthResponse {
 
-    private String token;
+    private String accessToken;
     private User user;
 
-    public AuthResponse(String token, User user) {
-        this.token = token;
+    public AuthResponse(
+            String accessToken,
+            User user
+    ) {
+        this.accessToken = accessToken;
         this.user = user;
     }
 
-    public String getToken() {
-        return token;
+    public String getAccessToken() {
+        return accessToken;
     }
 
     public User getUser() {

@@ -13,7 +13,7 @@ public class Main {
             AuthService authService =
                     new AuthService();
 
-            authService.createTable();
+            authService.createTables();
 
             HttpServer server =
                     HttpServer.create(
@@ -32,6 +32,16 @@ public class Main {
             );
 
             server.createContext(
+                    "/api/logout",
+                    new LogoutHandler()
+            );
+
+            server.createContext(
+                    "/api/refresh",
+                    new RefreshHandler()
+            );
+
+            server.createContext(
                     "/api/profile",
                     new ProfileHandler()
             );
@@ -44,6 +54,20 @@ public class Main {
             server.createContext(
                     "/api/dashboard",
                     new DashboardHandler()
+            );
+
+            server.createContext(
+                    "/api/forgot-password",
+                    new ForgotPasswordHandler()
+            );
+
+            server.createContext(
+                    "/api/reset-password",
+                    new ResetPasswordHandler()
+            );
+            server.createContext(
+                    "/api/verify-reset-user",
+                    new VerifyResetUserHandler()
             );
 
 

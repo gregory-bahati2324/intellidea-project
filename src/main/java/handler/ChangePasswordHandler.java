@@ -3,6 +3,7 @@ package handler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dto.ChangePasswordRequest;
+import middleware.AuthMiddleware;
 import model.User;
 import repository.UserRepository;
 import utils.CorsUtil;
@@ -32,9 +33,21 @@ public class ChangePasswordHandler implements HttpHandler {
             return;
         }
 
-        int userId = Integer.parseInt(
-                exchange.getRequestHeaders().getFirst("X-User-Id")
-        );
+        Integer userId =
+                AuthMiddleware.authenticate(
+                        exchange
+                );
+
+        if (userId == null) {
+
+            send(
+                    exchange,
+                    401,
+                    "{\"message\":\"Unauthorized\"}"
+            );
+
+            return;
+        }
 
         String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
 

@@ -3,6 +3,7 @@ package handler;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import dto.UpdateProfileRequest;
+import middleware.AuthMiddleware;
 import model.User;
 import repository.UserRepository;
 import utils.CorsUtil;
@@ -22,6 +23,10 @@ public class ProfileHandler implements HttpHandler {
 
         CorsUtil.apply(exchange);
 
+        System.out.println(
+                exchange.getRequestHeaders()
+        );
+
         if (exchange.getRequestMethod().equalsIgnoreCase("OPTIONS")) {
             exchange.sendResponseHeaders(204, -1);
             exchange.close();
@@ -29,10 +34,27 @@ public class ProfileHandler implements HttpHandler {
         }
 
         // TEMPORARY USER ID
-        int userId = Integer.parseInt(
-                exchange.getRequestHeaders()
-                        .getFirst("X-User-Id")
+        Integer userId =
+                AuthMiddleware.authenticate(
+                        exchange
+                );
+
+        System.out.println(
+                "AUTH HEADER = " +
+                        exchange.getRequestHeaders()
+                                .getFirst("Authorization")
         );
+
+        if (userId == null) {
+
+            sendJson(
+                    exchange,
+                    401,
+                    "{\"message\":\"Unauthorized\"}"
+            );
+
+            return;
+        }
 
         if (exchange.getRequestMethod().equalsIgnoreCase("GET")) {
 
@@ -75,7 +97,7 @@ public class ProfileHandler implements HttpHandler {
             updatedUser.setPhone(request.getPhone());
             updatedUser.setAvatarUrl(request.getAvatarUrl());
 
-            int userId2 = Integer.parseInt(userIdHeader);
+            int userId2 = userId;
 
             if (
                     userRepository.emailExistsForAnotherUser(
